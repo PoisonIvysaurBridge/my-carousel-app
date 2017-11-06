@@ -105,6 +105,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             console.log(descCarousel.innerHTML);
 
             var imgPath;
+            var files;
 
             window.addEventListener('clickedNext', function (e) {
                 console.log('my view1 clicked next!');
@@ -115,18 +116,19 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 console.log('my view1 clicked previous!');
                 descCarousel.previous();
             });
-
+            
             window.addEventListener('upload-success', function (e) {    // gets the file name upon upload
                 console.log('upload successful!');
                 imgPath = 'images/' + e.detail.file.name;
+                
                 console.log("imgPath: "+imgPath);
             });
-
 
             window.addEventListener('upload-desc', function (e) {    // gets the description upon clicking submit in view2
                 console.log('upload successful!');
                 //var imgPath = 'images/' + e.detail.file.name;
                 var imgDesc = e.detail.description;
+                files = e.detail.files;
                 //console.log("imgPath: "+imgPath);
                 console.log("imgDesc: "+imgDesc);
                 _addImage(imgPath, imgDesc);
@@ -137,10 +139,20 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 //imgPath = 'images/' + document.querySelector('vaadin-upload').shadowRoot.innerHTML; //shadowRoot.querySelector('#name').value;
                 console.log(imgPath);
                 console.log(imgDesc);
+                
+                for (var i = 0; i < files.length; i++) {
+                    var file = files[i];
+                    
+                    let img = document.createElement('img');
+                    img.classList.add("obj");
+                    img.file = file;
+                    //img.setAttribute('data-src', imgPath);
+                    imgCarousel.appendChild(img);
 
-                let img = document.createElement('img');
-                img.setAttribute('data-src', imgPath);
-                imgCarousel.appendChild(img);
+                    var reader = new FileReader();
+                    reader.onload = (function(aImg) { return function(e) { aImg.src = e.target.result; }; })(img);
+                    reader.readAsDataURL(file);
+                }
 
                 let desc = document.createElement('p');
                 desc.innerHTML = imgDesc;

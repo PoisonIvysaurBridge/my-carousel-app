@@ -29,10 +29,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <div class="card">
       <!--<div class="circle">2</div>-->
       <h1>Upload Image</h1>
-      <vaadin-upload class="thick-border" max-files="1"></vaadin-upload>
-      <h4>Please add a description of the image: <paper-input id="imgDesc" maxlength="100" on-input="_charLimit" required></paper-input></h4>
-        <p>Characters left: {{charLimit}} </p>
-        <paper-button raised class="primary" on-click="_send">Submit</paper-button>
+      <vaadin-upload id="vaadin" class="thick-border" accept="image/*"></vaadin-upload>
+      <h4>Description: <paper-input id="imgDesc"></paper-input></h4>
+      <paper-button raised class="primary" on-click="_send">Submit</paper-button>
       <!--
       <p>Ea duis bonorum nec, falli paulo aliquid ei eum.</p>
       <p>Id nam odio natum malorum, tibique copiosae expetenda mel ea.Detracto suavitate repudiandae no eum. Id adhuc minim soluta nam.Id nam odio natum malorum, tibique copiosae expetenda mel ea.</p>
@@ -42,24 +41,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
   <script>
     class MyView2 extends Polymer.Element {
-        static get is() { return 'my-view2'; }
-        static get properties(){
-            return {
-                charLimit: {
-                    type: Number,
-                    value: 100
-                }
-            }
-        }
-        _send(){
-              console.log('sending');
-              if(!this.$.imgDesc.value)
-                  this.$.imgDesc.value = 'no description added';
-              this.dispatchEvent(new CustomEvent('upload-desc', {detail:{description: this.$.imgDesc.value}, bubbles :  true, composed: true}));
-        }
-        _charLimit(){
-            this.charLimit = 100 - this.$.imgDesc.value.length;
-        }
+      static get is() { return 'my-view2'; }
+
+      _send(){
+          console.log('sending');
+          this.dispatchEvent(new CustomEvent('upload-desc', {detail:{description: this.$.imgDesc.value, files: this.$.vaadin.files}, bubbles :  true, composed: true}));
+      }
     }
 
     window.customElements.define(MyView2.is, MyView2);
