@@ -103,8 +103,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             var imgCarousel = this.$.images;
             console.log("is descCarousel null? "+descCarousel);
             console.log(descCarousel.innerHTML);
-
-            var imgPath;
+            //var imgPath;
             var files;
 
             window.addEventListener('clickedNext', function (e) {
@@ -117,11 +116,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 descCarousel.previous();
             });
             
-            window.addEventListener('upload-success', function (e) {    // gets the file name upon upload
+            window.addEventListener('upload-success', function (e) {    // gets the file name upon upload USELESS JUNK NOW
                 console.log('upload successful!');
-                imgPath = 'images/' + e.detail.file.name;
+                //imgPath = 'images/' + e.detail.file.name;
                 
-                console.log("imgPath: "+imgPath);
+                //console.log("imgPath: "+imgPath);
             });
 
             window.addEventListener('upload-desc', function (e) {    // gets the description upon clicking submit in view2
@@ -131,13 +130,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 files = e.detail.files;
                 //console.log("imgPath: "+imgPath);
                 console.log("imgDesc: "+imgDesc);
-                _addImage(imgPath, imgDesc);
+                _addImage(imgDesc);
+
             });
 
-            function _addImage(imgPath, imgDesc) {
+            function _addImage(imgDesc) {
 
                 //imgPath = 'images/' + document.querySelector('vaadin-upload').shadowRoot.innerHTML; //shadowRoot.querySelector('#name').value;
-                console.log(imgPath);
+                //console.log(imgPath);
                 console.log(imgDesc);
                 
                 for (var i = 0; i < files.length; i++) {
