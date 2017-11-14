@@ -118,16 +118,28 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             
             window.addEventListener('upload-success', function (e) {    // gets the file name upon upload USELESS JUNK NOW
                 console.log('upload successful!');
-                //imgPath = 'images/' + e.detail.file.name;
-                
-                //console.log("imgPath: "+imgPath);
             });
 
-            window.addEventListener('upload-desc', function (e) {    // gets the description upon clicking submit in view2
+            // THIS EVENT IS FROM SNAP PHOTO
+            window.addEventListener('snap-photo', function(e){
+                let img = e.detail.files;
+                imgCarousel.appendChild(img);
+                var reader = new FileReader();
+                reader.onload = (function(aImg) { return function(e) { aImg.src = e.target.result; }; })(img);
+                //reader.readAsDataURL(file);
+
+                let desc = document.createElement('p');
+                desc.innerHTML = e.detail.description;
+                descCarousel.appendChild(desc);
+
+            });
+
+            window.addEventListener('upload-img', function (e) {    // gets the description upon clicking submit in view2
                 console.log('upload successful!');
                 //var imgPath = 'images/' + e.detail.file.name;
                 var imgDesc = e.detail.description;
                 files = e.detail.files;
+                console.log("FILES: "+files+"FILES.length: "+files.length);
                 //console.log("imgPath: "+imgPath);
                 console.log("imgDesc: "+imgDesc);
                 _addImage(imgDesc);
@@ -136,8 +148,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
             function _addImage(imgDesc) {
 
-                //imgPath = 'images/' + document.querySelector('vaadin-upload').shadowRoot.innerHTML; //shadowRoot.querySelector('#name').value;
-                //console.log(imgPath);
                 console.log(imgDesc);
                 
                 for (var i = 0; i < files.length; i++) {

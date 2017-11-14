@@ -52,7 +52,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
       _send(){
           console.log('sending');
-          this.dispatchEvent(new CustomEvent('upload-desc', {detail:{description: this.$.imgDesc.value, files: this.$.vaadin.files}, bubbles :  true, composed: true}));
+          this.dispatchEvent(new CustomEvent('upload-img', {detail:{description: this.$.imgDesc.value, files: this.$.vaadin.files}, bubbles :  true, composed: true}));
       }
       _showCharLeft(){
           this.charLimit = 100 - this.$.imgDesc.value.length;

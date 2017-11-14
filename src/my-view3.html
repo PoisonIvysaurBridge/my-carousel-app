@@ -19,23 +19,37 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         padding: 10px;
       }
+      #video::after {
+        display: block;
+        content: '';
+        padding-top: 75%; /* 4:3 = height is 75% of width */
+      }
     </style>
-<!--
-    <div class="card">
+
+    <!--<div class="card">
+      <!--
       <div class="circle">3</div>
       <h1>View Three</h1>
       <p>Modus commodo minimum eum te, vero utinam assueverit per eu.</p>
       <p>Ea duis bonorum nec, falli paulo aliquid ei eum.Has at minim mucius aliquam, est id tempor laoreet.Pro saepe pertinax ei, ad pri animal labores suscipiantur.</p>
-    </div>
--->
-    <!--
-      Ideally these elements aren't created until it's confirmed that the 
-      client supports video/camera, but for the sake of illustrating the 
-      elements involved, they are created with markup (not JavaScript)
     -->
-    <video id="video" width="640" height="480" autoplay></video>
-    <paper-button raised id="snap" class="primary" on-click="_send">Snap Photo</paper-button>
-    <canvas id="canvas" width="640" height="480"></canvas>
+      <!--
+        Ideally these elements aren't created until it's confirmed that the 
+        client supports video/camera, but for the sake of illustrating the 
+        elements involved, they are created with markup (not JavaScript)
+      -->
+      <video id="video" autoplay></video>
+      <paper-button raised id="snap" class="primary">Snap Photo</paper-button>
+      <canvas id="canvas" width="640" height="480"></canvas>
+
+      <div class="card">
+        <h4>Description: <paper-input id="imgDesc" on-input="_showCharLeft"></paper-input></h4>
+        <p>Characters left: [[charLimit]] </p>
+        <paper-button raised class="primary" on-click="_send">Upload</paper-button>
+      </div>
+    <!--</div>-->
+
+    
   </template>
 
   <script>
@@ -46,24 +60,24 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       ready(){
         super.ready();
         // Grab elements, create settings, etc.
-      var video = this.$.video;
-      // Elements for taking the snapshot
-      var canvas = this.$.canvas;
-      var context = canvas.getContext('2d');
+        var video = this.$.video;
+        // Elements for taking the snapshot
+        var canvas = this.$.canvas;
+        var context = canvas.getContext('2d');
 
-      // Trigger photo take
-      this.$.snap.addEventListener("click", function() {
-        context.drawImage(video, 0, 0, 640, 480);
-      });
+        // Trigger photo take
+        this.$.snap.addEventListener("click", function() {
+          context.drawImage(video, 0, 0, 640, 480);
+        });
 
-      // Get access to the camera!
-      if(navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-          // Not adding `{ audio: true }` since we only want video now
-          navigator.mediaDevices.getUserMedia({ video: true }).then(function(stream) {
-              video.src = window.URL.createObjectURL(stream);
-              video.play();
-          });
-      }
+        // Get access to the camera!
+        if(navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+            // Not adding `{ audio: true }` since we only want video now
+            navigator.mediaDevices.getUserMedia({ video: true }).then(function(stream) {
+                video.src = window.URL.createObjectURL(stream);
+                video.play();
+            });
+        }
 
       /* Legacy code below: getUserMedia 
       else if(navigator.getUserMedia) { // Standard
@@ -83,6 +97,28 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           }, errBack);
       }
       */
+      }
+      static get properties(){
+          return{
+              charLimit: {
+                  type: Number, value: 100
+              }
+          }
+      }
+      _convertCanvasToImage(canvas) {
+        var image = document.createElement('img');
+        image.src = canvas.toDataURL("image/png");
+        return image;
+      }
+      
+      _send(){
+          var imgToBeUploaded = this._convertCanvasToImage(this.$.canvas);
+          console.log('sending');
+          this.dispatchEvent(new CustomEvent('snap-photo', {detail:{description: this.$.imgDesc.value, files: imgToBeUploaded}, bubbles :  true, composed: true}));
+          
+      }
+      _showCharLeft(){
+          this.charLimit = 100 - this.$.imgDesc.value.length;
       }
     }
 
