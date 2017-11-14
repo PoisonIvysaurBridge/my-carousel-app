@@ -19,15 +19,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         padding: 10px;
       }
-      #video::after {
-        display: block;
-        content: '';
-        padding-top: 75%; /* 4:3 = height is 75% of width */
+      video, canvas{
+        width: 100%; 
+        height:100%;
       }
     </style>
 
-    <!--<div class="card">
-      <!--
+    <!--
       <div class="circle">3</div>
       <h1>View Three</h1>
       <p>Modus commodo minimum eum te, vero utinam assueverit per eu.</p>
@@ -38,18 +36,19 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         client supports video/camera, but for the sake of illustrating the 
         elements involved, they are created with markup (not JavaScript)
       -->
-      <video id="video" autoplay></video>
-      <paper-button raised id="snap" class="primary">Snap Photo</paper-button>
-      <canvas id="canvas" width="640" height="480"></canvas>
-
       <div class="card">
+        <video id="video" style="" autoplay></video>
+        <br>
+        <paper-button raised id="snap" class="primary">Snap Photo</paper-button>
+        <br><br>
+        <h4>Photo Snapped:</h4>
+        <canvas id="canvas"></canvas>
+
+      
         <h4>Description: <paper-input id="imgDesc" on-input="_showCharLeft"></paper-input></h4>
         <p>Characters left: [[charLimit]] </p>
         <paper-button raised class="primary" on-click="_send">Upload</paper-button>
       </div>
-    <!--</div>-->
-
-    
   </template>
 
   <script>
