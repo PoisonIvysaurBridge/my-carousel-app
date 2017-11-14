@@ -47,6 +47,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         super.ready();
         // Grab elements, create settings, etc.
       var video = this.$.video;
+      // Elements for taking the snapshot
+      var canvas = this.$.canvas;
+      var context = canvas.getContext('2d');
+
+      // Trigger photo take
+      this.$.snap.addEventListener("click", function() {
+        context.drawImage(video, 0, 0, 640, 480);
+      });
 
       // Get access to the camera!
       if(navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
