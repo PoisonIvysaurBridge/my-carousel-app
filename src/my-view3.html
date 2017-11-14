@@ -20,18 +20,62 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         padding: 10px;
       }
     </style>
-
+<!--
     <div class="card">
       <div class="circle">3</div>
       <h1>View Three</h1>
       <p>Modus commodo minimum eum te, vero utinam assueverit per eu.</p>
       <p>Ea duis bonorum nec, falli paulo aliquid ei eum.Has at minim mucius aliquam, est id tempor laoreet.Pro saepe pertinax ei, ad pri animal labores suscipiantur.</p>
     </div>
+-->
+    <!--
+      Ideally these elements aren't created until it's confirmed that the 
+      client supports video/camera, but for the sake of illustrating the 
+      elements involved, they are created with markup (not JavaScript)
+    -->
+    <video id="video" width="640" height="480" autoplay></video>
+    <paper-button raised id="snap" class="primary" on-click="_send">Snap Photo</paper-button>
+    <canvas id="canvas" width="640" height="480"></canvas>
   </template>
 
   <script>
+      
     class MyView3 extends Polymer.Element {
       static get is() { return 'my-view3'; }
+
+      ready(){
+        super.ready();
+        // Grab elements, create settings, etc.
+      var video = this.$.video;
+
+      // Get access to the camera!
+      if(navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+          // Not adding `{ audio: true }` since we only want video now
+          navigator.mediaDevices.getUserMedia({ video: true }).then(function(stream) {
+              video.src = window.URL.createObjectURL(stream);
+              video.play();
+          });
+      }
+
+      /* Legacy code below: getUserMedia 
+      else if(navigator.getUserMedia) { // Standard
+          navigator.getUserMedia({ video: true }, function(stream) {
+              video.src = stream;
+              video.play();
+          }, errBack);
+      } else if(navigator.webkitGetUserMedia) { // WebKit-prefixed
+          navigator.webkitGetUserMedia({ video: true }, function(stream){
+              video.src = window.webkitURL.createObjectURL(stream);
+              video.play();
+          }, errBack);
+      } else if(navigator.mozGetUserMedia) { // Mozilla-prefixed
+          navigator.mozGetUserMedia({ video: true }, function(stream){
+              video.src = window.URL.createObjectURL(stream);
+              video.play();
+          }, errBack);
+      }
+      */
+      }
     }
 
     window.customElements.define(MyView3.is, MyView3);
